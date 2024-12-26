@@ -16,12 +16,15 @@ namespace JsuisUnGuerrier.Classes
         public double ATQ { get => _aTQ; set { _aTQ = value; } }
 
         public Random dice = new Random();
+        List<Guerrier> lesGuerrier = new List<Guerrier>();
         public Guerrier(string nom, double pDV, double aTQ)
         {
             Name = nom;
             PDV = pDV;
             ATQ = aTQ;
         }
+
+
         public string GetNom()
         {
             return Name;

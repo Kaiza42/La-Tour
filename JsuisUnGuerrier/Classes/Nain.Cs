@@ -18,6 +18,12 @@ namespace JsuisUnGuerrier.Classes
          
             ArmureLourde = armureLourde;
         }
+
+        public override string ToString()
+        {
+            return $"Nain - {Name} (PV: {PDV}, ATQ: {ATQ})";
+        }
+        
         public override void SubirDegats(double degat)
         {
             if(ArmureLourde == true)

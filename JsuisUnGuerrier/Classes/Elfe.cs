@@ -14,10 +14,13 @@ namespace JsuisUnGuerrier.Classes
         { 
         }
 
+        public override string ToString()
+        {
+            return $"Nain - {Name} (PV: {PDV}, ATQ: {ATQ})";
+        }
+
         public override double Attaquer()
         {
-
-            
             if(dice.Next(1, 7) == 6)
             {
                 ATQ = 150;
@@ -46,5 +49,7 @@ namespace JsuisUnGuerrier.Classes
             }
             return ATQ;
         }
+
+      
     }
 }
