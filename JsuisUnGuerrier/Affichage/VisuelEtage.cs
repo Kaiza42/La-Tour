@@ -9,7 +9,7 @@ namespace JsuisUnGuerrier.Affichage
             {
                 case 1:
                     AffichageEtage.EntreEtage();
-                    Etage4.CombatEtage4();
+                    Etage1.CombatEtage1();
                     break;
                 case 2:
                     AffichageEtage.EntreEtage();
