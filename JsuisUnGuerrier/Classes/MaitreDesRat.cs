@@ -16,7 +16,7 @@ namespace JsuisUnGuerrier.Classes
         }
         public override string ToString()
         {
-            return $"MaitreDesRat - {Name} (PV: {PDV}, ATQ: {ATQ})";
+            return $"MaitreDesRat - {Name} (PV: {PDV}, ATQ: 45)\n";
         }
         public override double Attaquer()
         {
@@ -26,18 +26,18 @@ namespace JsuisUnGuerrier.Classes
                 case 6:
                     ATQ = 100;
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"{Name} a fait un Coup Critique et inflige 100 !");
+                    Centre($"{Name} a fait un Coup Critique et inflige 100 !");
                     Console.ResetColor();
                     break;
                 case 1:
                     ATQ = 0;
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"{Name} a raté son attaque ! ");
+                    Centre($"{Name} a raté son attaque ! ");
                     Console.ResetColor();
                     break;
                 default:
-                    ATQ = 50;
-                    Console.WriteLine($"{Name} a fait 50 de dégat !");
+                    ATQ = 45;
+                    Centre($"{Name} a fait 50 de dégat !");
                     break;
             }
             return ATQ;
@@ -45,13 +45,13 @@ namespace JsuisUnGuerrier.Classes
         public override double AttaqueSpecial()
         {
             if (CDS <= 0)
-            { 
+            {
                 int rollAttackSpecial = dice.Next(1, 7);
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"\t ╔═════════════════════════════════════════════════════╗ ");
-                Console.WriteLine($"\t ║  A L'attaque Britney, Witney,Courtney , Sydney!     ║ ");
-                Console.WriteLine($"\t ╚═════════════════════════════════════════════════════╝ ");
-
+                Centre($" ╔═════════════════════════════════════════════════════╗ ");
+                Centre($" ║  A L'attaque Britney, Witney,Courtney , Sydney!     ║ ");
+                Centre($" ╚═════════════════════════════════════════════════════╝ ");
+                Console.WriteLine();
                 Console.ResetColor();
                 switch (rollAttackSpecial)
                 {
@@ -61,57 +61,54 @@ namespace JsuisUnGuerrier.Classes
                         //l'appeltion de ma methode DOT du coup qui dureras le temp du Delai de attaque spécial 
                         Dot(15);
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"{Name} a fait 180 de dégat !");
+                        Centre($"{Name} a fait 180 de dégat !");
                         Console.ResetColor();
                         break;
                     default:
                         ATQ = 90;
                         CDS = 5;
                         Dot(15);
-                        Console.WriteLine($"{Name} a fait 90 de dégat !");
+                        Centre($"{Name} a fait 90 de dégat !");
                         break;
                 }
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("On abuse pas des Attaque spécial Aventurier ! ");
+                Centre("On abuse pas des Attaque spécial Aventurier ! ");
                 Console.ResetColor();
             }
             return ATQ;
         }
         // DOT damage over time 
-        public void Dot(int degatPoison)
+        public override void Dot(int degatFeu)
         {
-            Poison = degatPoison;
+            Poison = degatFeu;
             // Si le delai est plus grand que 0 la compétence ne ce lance pas 
             if (CDS > 0)
             {
-                // Degat du poison
-                monstre[0].PDV -= Poison;
-                // si le delai de poison atteint 0 alors il s'arrete.
-                if (CDS == 0)
-                {
-                    Poison = 0;
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"{monstre[0].Name} n'est plus empoisonné !");
-                    Console.ResetColor();
-                }
+                // Si le cooldown est encore actif (CDS > 0), rien ne se passe
+                return; // Retourne et arrête l'exécution de la méthode ici
             }
+            // Degat du Feu
+            monstre[0].PDV -= Poison;
         }
         public override void ReductionCooldownSpecial()
         {
-            //Si CD et plus grand que 0 
-            if (CDS > 0)
+            //Si monstre a au moins 1 membre dans la liste alors il le fait sinon.. bah il fait rien logique 
+            if (monstre.Count > 0)
             {
-                // Va réduir le compteur de CD 
-                CDS--;
+                //Si CD et plus grand que 0 
+                if (CDS > 0)
+                {
+                    // Va réduir le compteur de CD 
+                    CDS--;
+                }
+                Dot(15);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Centre($"{monstre[0].Name} subit {Poison} dégâts de Poison");
+                Console.ResetColor();
             }
-            Dot(15);
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine($"{monstre[0].Name} subit {Poison} dégâts de poison.");
-            Console.ResetColor();
         }
-
     }
 }

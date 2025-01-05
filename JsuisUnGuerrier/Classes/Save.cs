@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace JsuisUnGuerrier.Classes
 {
+    // sa était créer trop tot je doit la mettre a jour mais je souhaite dormir..
+    // elle est pas tres au point pour etre honnete 
+    // c'etait un essaie je suis content du test mais j'aurais peut etre du prendre plus de temp pour comprendre un peu mieux le fonctionnement
+    // 
     internal class Save : Guerrier
     {
         public Save(string nom, double pDV, double aTQ, double dEF) : base(nom, pDV, aTQ, dEF)
         {
         }
-        public class GuerrierDTO
+        public class GuerrierData
         {
             public string Name { get; set; }
             public double PDV { get; set; }
@@ -21,90 +20,67 @@ namespace JsuisUnGuerrier.Classes
             public double Heal { get; set; }
             public int CD { get; set; }
         }
-        // cette classe sert uniquement a la sauveguarde a rien d'autre je ne voulais pas que sa sois dans Guerrier et que sa soit une classe four-tout
+        
         public static void Sauvegarder()
         {
             // Je créer une liste pour stocker 
-            var guerriersDTO = new List<GuerrierDTO>();
+            var guerriersData = new List<GuerrierData>();
             foreach (var guerrier in lesGuerrier)
             {
-                guerriersDTO.Add(new GuerrierDTO
+                guerriersData.Add(new GuerrierData
                 {
                     Name = guerrier.Name,
                     PDV = guerrier.PDV,
                     ATQ = guerrier.ATQ,
                     Heal = guerrier.Heal,
-                    CD = guerrier.CD 
+                    CD = guerrier.CD
                 });
             }
-            //Deux liste ?  monstre et guerrier donc logique
-            var monstresDTO = new List<GuerrierDTO>();
-            foreach (var monstre in monstre)
-            {
-                monstresDTO.Add(new GuerrierDTO
-                {
-                    Name = monstre.Name,
-                    PDV = monstre.PDV,
-                    ATQ = monstre.ATQ,
-                    Heal = monstre.Heal,
-                    CD = monstre.CD 
-                });
-            }
-
-            // Sérialisation des listes
+            // va etre rentrer dans serialisé
             var data = new
             {
-                Guerriers = guerriersDTO,
-                Monstres = monstresDTO
+                Guerriers = guerriersData,
             };
-
             JsonSerializerOptions options = new JsonSerializerOptions
             {
+                //permet que le json soit plus lisible
                 WriteIndented = true,
-                IncludeFields = true,
+                //permet d'eviter les propriété a valeur Null
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-
-            string jsonString = JsonSerializer.Serialize(data, options);
-            File.WriteAllText("save.json", jsonString);
-            Console.WriteLine("Sauvegarde effectuée !");
+            // convertie les objet en une chaine json 
+            string maData = JsonSerializer.Serialize(data, options);
+            File.WriteAllText("SauvegardeDuJeu.json", maData);
+            Console.Clear();
+            Centre("Sauvegarde effectuée !");
         }
         public static void Charger()
         {
-            if (File.Exists("save.json"))
+            if (File.Exists("SauvegardeDuJeu.json"))
             {
-                string jsonString = File.ReadAllText("save.json");
-                var data = JsonSerializer.Deserialize<dynamic>(jsonString);
+                string madata2 = File.ReadAllText("SauvegardeDuJeu.json");
+                // dynamic permet donc de ne pas prendr ene compte le type de l'item et le type l'item est pris en compte au moment de l'instanciation 
+                // je ne suis pas sur de l'avoir compris correctement 
+                var data = JsonSerializer.Deserialize<dynamic>(madata2);
 
                 // Désérialisation des guerriers
-                var guerriersDTO = JsonSerializer.Deserialize<List<GuerrierDTO>>(data.GetProperty("Guerriers").ToString());
-                lesGuerrier.Clear(); // Vide la liste existante avant de la remplir de nouvelles données
-                foreach (var guerrierDTO in guerriersDTO)
+                //Le GetProperty  me permet d'aller prendre l'objet Guerrier et ses Objet avec 
+                var guerriersData = JsonSerializer.Deserialize<List<GuerrierData>>(data.GetProperty("Guerriers").ToString());
+                // vide la liste
+                lesGuerrier.Clear(); 
+                // ajoute les fichier sauvegarder a ma liste "lesGuerrier"
+                foreach (var guerrierDATA in guerriersData)
                 {
-                    
-                    lesGuerrier.Add(new Guerrier(guerrierDTO.Name, guerrierDTO.PDV, guerrierDTO.ATQ, guerrierDTO.Heal)
+                    lesGuerrier.Add(new Guerrier(guerrierDATA.Name, guerrierDATA.PDV, guerrierDATA.ATQ, guerrierDATA.Heal)
                     {
-                        CD = guerrierDTO.CD 
+                        CD = guerrierDATA.CD
                     });
                 }
-
-                // Désérialisation des monstres
-                var monstresDTO = JsonSerializer.Deserialize<List<GuerrierDTO>>(data.GetProperty("Monstres").ToString());
-                monstre.Clear();
-                foreach (var monstreDTO in monstresDTO)
-                {
-                    // Recrée les objets Monstre
-                    monstre.Add(new Guerrier(monstreDTO.Name, monstreDTO.PDV, monstreDTO.ATQ, monstreDTO.Heal)
-                    {
-                        CD = monstreDTO.CD
-                    });
-                }
-
-                Console.WriteLine("Données chargées depuis la sauvegarde !");
             }
             else
             {
-                Console.WriteLine("Aucune sauvegarde trouvée.");
+                Console.Clear();
+                Centre("Aucune sauvegarde trouvée !");
             }
         }
 

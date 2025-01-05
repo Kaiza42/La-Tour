@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JsuisUnGuerrier.Classes
+﻿namespace JsuisUnGuerrier.Classes
 {
     internal class Wolf : Guerrier
     {
-        private bool _saignement;
+        private int _griffe;
 
-        public bool Saignement { get => _saignement; set { _saignement = value; } }
-        public Wolf(string nom, double pDV, double aTQ, double dEF, bool saignement) : base(nom, pDV, aTQ, dEF)
+        public int Griffe { get => _griffe; set { _griffe = value; } }
+        public Wolf(string nom, double pDV, double aTQ, double dEF, int griffe) : base(nom, pDV, aTQ, dEF)
         {
-            Saignement = saignement;
+            Griffe = griffe;
         }
         public override string ToString()
         {
-            return $" le monstre {Name} (PV: {PDV}, ATQ: {ATQ})";
+            return $" le Loup {Name} (PV: {PDV}, ATQ: {ATQ})";
         }
         public override double Attaquer()
         {
@@ -29,51 +23,65 @@ namespace JsuisUnGuerrier.Classes
                 case 6:
                     ATQ = 90;
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"{Name} a fait {ATQ} de dégat !");
+                    Centre($"{Name} a fait {ATQ} de dégat !");
                     Console.ResetColor();
                     break;
                 case 1:
                     ATQ = 10;
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"{Name} a raté son attaque !");
+                    Centre($"{Name} a raté son attaque !");
                     Console.ResetColor();
                     break;
                 default:
                     ATQ = 45;
-                    Console.WriteLine($"{Name} a fait {ATQ} de dégat !");
+                    Centre($"{Name} a fait {ATQ} de dégat !");
                     break;
             }
             return ATQ;
         }
-        public void Mob()
+        public override double AttaqueSpecial()
         {
-            Wolf wolf = new Wolf("wolfy", 250, 0, 0, true);
-            Ogres Ogres = new Ogres("Alexandre", 300, 40, 0, 0);
-            monstre.Add(wolf);
-            monstre.Add(Ogres);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            // Bon la phrases du gobelin a ne pas sortir de son contexte stp..
+            Centre($" ╔══════════╗ ");
+            Centre($" ║  Wof !   ║ ");
+            Centre($" ╚══════════╝ ");
+            Console.ResetColor();
+            int rollAttackSpecial = dice.Next(1, 7);
+            switch (rollAttackSpecial)
+            {
+                case 6:
+                    Griffe = 80;
+                    CDS = 3;
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Centre($"{Name} inflige 140 dégats avec un coup critique avec Griffe !");
+                    Console.ResetColor();
+                    break;
+                default:
+                    Griffe = 40;
+                    CDS = 3;
+                    Centre($"{Name} a fait 70 Avec sa Lancer De Roue !");
+                    break;
+            }
+            return Griffe;
         }
         public void Drop()
         {
-                Console.WriteLine("Bravo Vous avez un Nouveau Compagnon ! ");
-                MaitreDesRat Julie = new MaitreDesRat("julie", 500, 40, 10, 0);
-                lesGuerrier.Add(Julie);
-                //if (dice.Next(1, 101) < 1 && dice.Next(1, 101) > 6) 
-                //{
-                //    MaitreDesRat 
-                //}
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Centre("Aventurier ! Un nouveau héros a été ajouté à votre compagnie !");
+            MaitreDesRat Julie = new MaitreDesRat("julie", 500, 40, 10, 0);
+            lesGuerrier.Add(Julie);
         }
         public override void SubirDegats(double degat)
         {
-        
             PDV -= degat;
-            Console.WriteLine($"{Name} as subis {degat} degats, il lui reste {PDV} de vie");
+            Centre($"{Name} as subis {degat} degats, il lui reste {PDV} de vie");
         }
         public override void Death()
         {
-            Console.WriteLine($"{Name} est mort.");
+            Centre($"{Name} est mort.");
             Drop();
-
         }
-        
+
     }
 }

@@ -7,4 +7,23 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Classes\NewFolder\**" />
+    <Compile Remove="NewFolder1\**" />
+    <Compile Remove="Affichage\NewFolder\**" />
+    <Compile Remove="NewFolder\**" />
+    <EmbeddedResource Remove="Classes\NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="Affichage\NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="Classes\NewFolder\**" />
+    <None Remove="NewFolder1\**" />
+    <None Remove="Affichage\NewFolder\**" />
+    <None Remove="NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Classes\Affichage.cs" />
+  </ItemGroup>
+
 </Project>

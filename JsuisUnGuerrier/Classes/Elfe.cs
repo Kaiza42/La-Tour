@@ -12,7 +12,7 @@
         // l'affichage 
         public override string ToString()
         {
-            return $"Elfe - {Name} (PV: {PDV}, ATQ: {ATQ})";
+            return $"Elfe - {Name} (PV: {PDV}, ATQ: 75)\n";
         }
         //Attaque basic 
         public override double Attaquer()
@@ -25,18 +25,20 @@
                 case 6:
                     ATQ = 150;
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"{Name} a fait {ATQ} de dégat !");
+                    Centre($"{Name} a fait {ATQ} de dégat !");
                     Console.ResetColor();
                     break;
                 case 1:
                     ATQ = 0;
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"{Name} a raté son attaque !");
+                    Centre($"{Name} a raté son attaque !");
                     Console.ResetColor();
+                    PDV -= 15;
                     break;
                 default:
                     ATQ = 75;
-                    Console.WriteLine($"{Name} a fait {ATQ} de dégat !");
+                    Centre($"{Name} a fait {ATQ} de dégat !");
+                    PDV -= 15;
                     break;
             }
             return ATQ;
@@ -48,35 +50,34 @@
             if (CDS <= 0)
             {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\t ╔═══════════════════════════════════╗ ");
-            Console.WriteLine($"\t ║   Je ne Rate Jamais ma Cible !    ║ ");
-            Console.WriteLine($"\t ╚═══════════════════════════════════╝ ");
+                Centre($" ╔═══════════════════════════════════╗ ");
+                Centre($" ║   Je ne Rate Jamais ma Cible !    ║ ");
+                Centre($" ╚═══════════════════════════════════╝ ");
+                Console.WriteLine();
             Console.ResetColor();
             int rollAttackSpecial = dice.Next(1, 7);
-            
                 switch (rollAttackSpecial)
                 {
                     case 6:
-
                         //les degat de Fleche quand il Active l'attaque Spécial
-                        Fleche = 180;
+                        Fleche = 170;
                         // le delai de récupération
                         CDS = 5;
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"{Name} inflige 180 dégats avec un coup critique avec ses Double FLeche !");
+                        Centre($"{Name} inflige 180 dégats avec un coup critique avec ses Double FLeche !");
                         Console.ResetColor();
                         break;
                     default:
-                        Fleche = 90;
+                        Fleche = 85;
                         CDS = 5;
-                        Console.WriteLine($"{Name} a fait 90 Avec ses Double Fleche !");
+                        Centre($"{Name} a fait 90 Avec ses Double Fleche !");
                         break;
                 }
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("On abuse pas des Attaque spécial Aventurier ! ");
+                Centre("On abuse pas des Attaque spécial Aventurier ! ");
                 Console.ResetColor();
             }
                 return Fleche;
@@ -85,30 +86,28 @@
         public static void ChoiceElfe()
         {
             Console.Clear();
-            //pourquoi un do while pour verifier une saisie ? Il doit bien faire la saisie une fois pourvérifier si il fait une erreure
+            //pourquoi un do while pour verifier une saisie ? Il doit bien faire la saisie une fois pour vérifier si il fait une erreure
             do
             {
-                Console.Write("Veuillez saisir un nom pour votre Elfe entre 1 a 10 caractre : ");
+                CentreEcrit("Veuillez saisir un nom pour votre Elfe entre 1 a 10 caractre : ");
                 saisieName = Console.ReadLine();
                 //Gere la saisie de name pas trop long pas trop court
-                if (saisieName.Length > 10 || saisieName.Length < 1)
+                if (saisieName.Length > 16 || saisieName.Length < 1)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Veuillez saisir nombre de caractere entre 1 et 10");
+                    Centre("Veuillez saisir nombre de caractere entre 1 et 10");
                     Console.ResetColor();
-                    Console.Write("Veuillez saisir un nom Valide pour votre Elfe : ");
+                    CentreEcrit("Veuillez saisir un nom Valide pour votre Elfe : ");
                     saisieName = Console.ReadLine();
                 }
                 // control longeur de la saisie pour le pseudo 
             } while (saisieName.Length > 16 || saisieName.Length < 1);
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"Bienvenue {saisieName} ! ");
+            Console.WriteLine();
+            Centre($"Bienvenue {saisieName} ! \n" );
             Console.ResetColor();
-            // j'ai fait un choix de type equilibrage et surtout moins de probleme a gerer en enlevant la saisieATQ sa fonctionner mais C'etait chiant a gerer surtout
-            // si on pense au fait que equilibrer les Monstre en fonction de l'attaque choisie par le joueur donc changerais forcément la vie du joueur trop long a mettre en place je n'ai pas 
-            //le temp de gerer cette equilibrage.. 
-            Elfe guerrier = new Elfe(saisieName, 500, 0, 75, 90);
+            Elfe guerrier = new Elfe(saisieName, 500, 75, 75, 90);
             //j'ajoute le guerrier ou l'aventurier choisie hein.
             lesGuerrier.Add(guerrier);
 

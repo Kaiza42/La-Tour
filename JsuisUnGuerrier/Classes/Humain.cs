@@ -1,19 +1,17 @@
 ﻿namespace JsuisUnGuerrier.Classes
 {
-    internal class Sorcier : Guerrier
+    internal class Humain : Guerrier
     {
-        private double _explosion;
-        public double Explosion { get => _explosion; set { _explosion = value; } }
-
-        public Sorcier(string nom, double pDV, double aTQ, double heal, double explosion) : base(nom, pDV, aTQ, heal)
+        private double _rage;
+        public double Rage { get => _rage; set { _rage = value; } }
+        public Humain(string nom, double pDV, double aTQ, double heal, double rage) : base(nom, pDV, aTQ, heal)
         {
-            Explosion = explosion;
+            Rage = rage;
         }
-        //affichage sorcier
+        // l'affichage 
         public override string ToString()
         {
-            // le principe voudrais quelle sappel Megumi mais on verra 
-            return $"Sorcier - {Name} (PV: {PDV}, ATQ: 30 )\n";
+            return $"Humain - {Name} (PV: {PDV}, ATQ: 65)\n";
         }
         //Attaque basic 
         public override double Attaquer()
@@ -24,7 +22,7 @@
             switch (rollAttack)
             {
                 case 6:
-                    ATQ = 100;
+                    ATQ = 130;
                     Console.ForegroundColor = ConsoleColor.Green;
                     Centre($"{Name} a fait {ATQ} de dégat !");
                     Console.ResetColor();
@@ -36,41 +34,39 @@
                     Console.ResetColor();
                     break;
                 default:
-                    ATQ = 30;
+                    ATQ = 65;
                     Centre($"{Name} a fait {ATQ} de dégat !");
                     break;
             }
             return ATQ;
         }
-        //Attaque spécial Sorcier celle la on peut dire que c'est une spécial..
+        //Une attaque spécial pour pas que sa soit redondant a faire 1 ou 2 il fallait un autre choix
+        // cette methode est une attaque spécial qui lance un dé a voir si il fait un crit a 6 et une attaque default au autre chiffre tomber.
         public override double AttaqueSpecial()
         {
             if (CDS <= 0)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Centre($"╔════════════════╗ ");
-                Centre($"║   EXPLOSION !! ║ ");
-                Centre($"╚════════════════╝ ");
-                Console.WriteLine("");
+                Centre($" ╔═══════════════════════════════════════════════════════════════════════╗ ");
+                Centre($" ║   Je ne cherche ni gloire, ni honneur... Seulement ta destruction !   ║ ");
+                Centre($" ╚═══════════════════════════════════════════════════════════════════════╝ ");
                 Console.ResetColor();
                 int rollAttackSpecial = dice.Next(1, 7);
-
                 switch (rollAttackSpecial)
                 {
                     case 6:
-
                         //les degat de Fleche quand il Active l'attaque Spécial
-                        Explosion = 6000000000000;
+                        Rage = 200;
                         // le delai de récupération
-                        CDS = 9999;
+                        CDS = 5;
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Centre($"{Name} inflige 6000000000000 dégats avec un coup critique avec son EXPLOSION !");
+                        Centre($"{Name} inflige 180 dégats avec un coup critique avec Rage du Berserker !");
                         Console.ResetColor();
                         break;
                     default:
-                        Explosion = 1500;
-                        CDS = 9999;
-                        Centre($"{Name} a fait 1500 Avec EXPLOSION !");
+                        Rage = 100;
+                        CDS = 5;
+                        Centre($"{Name} a fait 90 Avec Rage du Berserker !");
                         break;
                 }
             }
@@ -80,7 +76,10 @@
                 Centre("On abuse pas des Attaque spécial Aventurier ! ");
                 Console.ResetColor();
             }
-            return Explosion;
+            return Rage;
         }
+        // la methode pour créer un Elfe dans sa propre classe ? hmm..
+
     }
 }
+

@@ -1,27 +1,33 @@
-﻿namespace JsuisUnGuerrier.Classes 
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace JsuisUnGuerrier.Classes
 {
-    internal class Gobelin : Guerrier
+    internal class NobleVampire : Guerrier
     {
-        private int _coupDePoignard;
-        public int CoupDePoignard { get => _coupDePoignard; set { _coupDePoignard = value; } }
-        public Gobelin(string nom, double pDV, double aTQ, double heal, int coupDePoignard) : base(nom, pDV, aTQ, heal)
+        private int _sanguinaire;
+        public int Sanguinaire { get => _sanguinaire; set { _sanguinaire = value; } }
+        public NobleVampire(string nom, double pDV, double aTQ, double heal, int sanguinaire) : base(nom, pDV, aTQ, heal)
         {
-            CoupDePoignard = coupDePoignard;
+            Sanguinaire = sanguinaire;
         }
         public override string ToString()
         {
-            return $"\tGobelin - {Name} (PV: {PDV}, ATQ: 40)\n";
+            return $"\tNoble Vampire - {Name} (PV: {PDV}, ATQ: 80)\n";
         }
         //Sur le principe le gobelin aparaitrer dans le Deuxieme Etage Et dornnerais le sorcier
         public override double Attaquer()
         {
-
             // a la base c'etait un if else et je devais le retaper en boucle sa me déranger un peu
             int rollAttack = dice.Next(1, 7);
             switch (rollAttack)
             {
                 case 6:
-                    ATQ = 110;
+                    ATQ = 160;
                     Console.ForegroundColor = ConsoleColor.Red;
                     Centre($"{Name} a fait un Coup Critique et inflige {ATQ}");
                     Console.ResetColor();
@@ -33,7 +39,7 @@
                     Console.ResetColor();
                     break;
                 default:
-                    ATQ = 40;
+                    ATQ = 80;
                     Centre($"{Name} a fait {ATQ} de dégat !");
                     break;
             }
@@ -44,40 +50,49 @@
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             // Bon la phrases du gobelin a ne pas sortir de son contexte stp..
-            Centre($" ╔═════════════════════════════════════════════════╗ ");
-            Centre($" ║  C'est toujours plus amusant quand tu hurles !  ║ ");
-            Centre($" ╚═════════════════════════════════════════════════╝ ");
+            Centre($" ╔═══════════════════════════╗ ");
+            Centre($" ║  Soumets-toi, misérable ! ║ ");
+            Centre($" ╚═══════════════════════════╝ ");
             Console.ResetColor();
             int rollAttackSpecial = dice.Next(1, 7);
             switch (rollAttackSpecial)
             {
                 case 6:
-                    CoupDePoignard = 140;
+                    Sanguinaire = 200;
                     CDS = 5;
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Centre($"{Name} inflige 140 dégats avec un coup critique avec sa Lancer de Roue !");
+                    monstre[0].PDV += 80;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Centre($"{Name} inflige 160 dégats avec un coup critique avec Griffe !");
+                    Centre($" Heal un Allié de 80 Pv");
                     Console.ResetColor();
                     break;
                 default:
-                    CoupDePoignard = 70;
+                    Sanguinaire = 100;
                     CDS = 5;
+                    monstre[0].PDV += 40;
                     Centre($"{Name} a fait 70 Avec sa Lancer De Roue !");
+                    Centre($" Heal un Allié de 40 Pv");
                     break;
             }
-            return CoupDePoignard;
+            return Sanguinaire;
         }
-      
         public override void SubirDegats(double degat)
         {
             PDV -= degat;
             Centre($"{Name} as subis {degat} degats, il lui reste {PDV} de vie");
-           
         }
         public override void Death()
         {
             Centre($"{Name} est mort.");
-            
+            Drop();
+        }
+        public void Drop()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Centre("Aventurier ! Un nouveau héros a été ajouté à votre compagnie !");
+            Console.ResetColor();
+            Elfe elfe = new Elfe("Eleanor", 450, 75, 10, 15);
+            lesGuerrier.Add(elfe);
         }
     }
-
 }

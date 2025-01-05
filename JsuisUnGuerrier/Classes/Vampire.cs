@@ -1,17 +1,18 @@
 ﻿namespace JsuisUnGuerrier.Classes
 {
-    internal class Ogres : Guerrier
+    internal class Vampire : Guerrier 
     {
-        private int _lancerDeRoue;
-        public int LancerDeRoue { get => _lancerDeRoue; set { _lancerDeRoue = value; } }
-        public Ogres(string nom, double pDV, double aTQ, double dEF, int lancerDeRoue) : base(nom, pDV, aTQ, dEF)
+        private int _baiserDuVampire;
+        public int BaiserDuVampire { get => _baiserDuVampire; set { _baiserDuVampire = value; } }
+        public Vampire(string nom, double pDV, double aTQ, double heal, int baiserDuVampire) : base(nom, pDV, aTQ, heal)
         {
-            LancerDeRoue = lancerDeRoue;
+            BaiserDuVampire = baiserDuVampire;
         }
         public override string ToString()
         {
-            return $"\tOgre - {Name} (PV: {PDV}, ATQ: 60)\n";
+            return $"\tVampire - {Name} (PV: {PDV}, ATQ: 60)\n";
         }
+        //Sur le principe le gobelin aparaitrer dans le Deuxieme Etage Et dornnerais le sorcier
         public override double Attaquer()
         {
             // a la base c'etait un if else et je devais le retaper en boucle sa me déranger un peu
@@ -19,7 +20,7 @@
             switch (rollAttack)
             {
                 case 6:
-                    ATQ = 140;
+                    ATQ = 120;
                     Console.ForegroundColor = ConsoleColor.Red;
                     Centre($"{Name} a fait un Coup Critique et inflige {ATQ}");
                     Console.ResetColor();
@@ -41,35 +42,37 @@
         public override double AttaqueSpecial()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Centre($"\t ╔═════════════════════════════════╗ ");
-            Centre($"\t ║   Aléatoirement Ce Sera TOI !   ║ ");
-            Centre($"\t ╚═════════════════════════════════╝ ");
+            // Bon la phrases du gobelin a ne pas sortir de son contexte stp..
+            Centre($" ╔════════════════════════════════════════════════════════╗ ");
+            Centre($" ║  Ton sang me nourrira, Le temps de ta vie est compté ! ║ ");
+            Centre($" ╚════════════════════════════════════════════════════════╝ ");
             Console.ResetColor();
             int rollAttackSpecial = dice.Next(1, 7);
             switch (rollAttackSpecial)
             {
                 case 6:
-                    //les degat de Fleche quand il Active l'attaque Spécial
-                    LancerDeRoue = 180;
-                    // le delai de récupération
-                    CDS = 5;
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Centre($"{Name} inflige 180 dégats avec un coup critique avec sa Lancer de Roue !");
+                    BaiserDuVampire = 160;
+                    CDS = 3;
+                    monstre[0].PDV += 60;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Centre($"{Name} inflige 160 dégats avec un coup critique avec Baiser Du Vampire !");
+                    Centre($" Heal un Allié de 60 Pv");
                     Console.ResetColor();
                     break;
                 default:
-                    LancerDeRoue = 90;
-                    CDS = 5;
-                    Centre($"{Name} a fait 90 Avec sa Lancer De Roue !");
+                    BaiserDuVampire = 70;
+                    CDS = 3;
+                    monstre[0].PDV += 30;
+                    Centre($"{Name} a fait 70 Avec Baiser Du Vampire !");
+                    Centre($" Heal un Allié de 30 Pv");
                     break;
             }
-            return LancerDeRoue;
+            return BaiserDuVampire;
         }
         public override void SubirDegats(double degat)
         {
             PDV -= degat;
             Centre($"{Name} as subis {degat} degats, il lui reste {PDV} de vie");
-            //Verifie les point de vie pour l'enlever de la liste car bon le faire combattre jusuqu'a -5000 c'est chiant
         }
         public override void Death()
         {
@@ -80,12 +83,9 @@
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Centre("Aventurier ! Un nouveau héros a été ajouté à votre compagnie !");
-            Humain Benji = new Humain("Benji", 700, 65, 10, 0);
-            lesGuerrier.Add(Benji);
-            //if (dice.Next(1, 101) < 1 && dice.Next(1, 101) > 6) 
-            //{
-            //    MaitreDesRat 
-            //}
+            Console.ResetColor();
+            Pretre pretre = new Pretre("Elunor", 450, 30, 10, 15,0);
+            lesGuerrier.Add(pretre);
         }
     }
 }
