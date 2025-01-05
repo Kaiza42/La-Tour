@@ -7,7 +7,7 @@ namespace JsuisUnGuerrier.Affichage
         {
             switch (Etage1.compteurEtage)
             {
-                case 6:
+                case 1:
                     AffichageEtage.EntreEtage();
                     Etage4.CombatEtage4();
                     break;
@@ -27,9 +27,12 @@ namespace JsuisUnGuerrier.Affichage
                     AffichageEtage.EntreEtage();
                     Etage5.CombatEtage5();
                     break;
-                case 1:
+                case 6:
                     AffichageBoss.EntreEtageVampire();
                     Etage6.CombatEtage6();
+                    break;
+                case 7:
+                    Affichage.FinDuJeu();
                     break;
             }
         }

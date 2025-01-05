@@ -67,6 +67,20 @@ namespace JsuisUnGuerrier.Affichage
             Centre($"╚═════════════════════════╝");
             Console.ResetColor();
         }
+        public static void FinDuJeu()
+        {
+            Centre($"\n");
+            Centre($"╔═══════════════════════════════════╗");
+            Centre($"║  Merci D'etre arriver a la fin !  ║");
+            Centre($"╚═══════════════════════════════════╝");
+            Centre($"\n");
+            Centre($"C'était la première fois que je tentais un jeu en console de commande, c'était bien sympa. Je pense y retoucher un jour ou l'utiliser pour un jeu plus poussé.");
+            Centre($"Ce jeu m'a énormément appris, j'ai adoré le faire. C'était vraiment un très grand plaisir !");
+        }
+
+
+
+
 
        
     }
