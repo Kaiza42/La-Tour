@@ -55,7 +55,7 @@ namespace JsuisUnGuerrier.Affichage
             Console.WriteLine($"\n\n");
             Centre("Appuyez sur une touche pour rentrer dans les donjon Aventurier !");
             // permet de passer a la suite donc a la page du menu
-            Console.ReadKey(true);
+           
             Console.Clear();
         }
         public static void Fermeture()
@@ -69,19 +69,23 @@ namespace JsuisUnGuerrier.Affichage
         }
         public static void FinDuJeu()
         {
+            Console.Clear();
             Centre($"\n");
             Centre($"╔═══════════════════════════════════╗");
             Centre($"║  Merci D'etre arriver a la fin !  ║");
             Centre($"╚═══════════════════════════════════╝");
             Centre($"\n");
-            Centre($"C'était la première fois que je tentais un jeu en console de commande, c'était bien sympa. Je pense y retoucher un jour ou l'utiliser pour un jeu plus poussé.");
-            Centre($"Ce jeu m'a énormément appris, j'ai adoré le faire. C'était vraiment un très grand plaisir !");
+            Centre($"C'était la première fois que je tentais un jeu en console de commande, c'était bien sympa.");
+            Centre($" Je pense y retoucher un jour ou l'utiliser pour un jeu plus poussé.");
+            Centre($"Ce jeu m'a énormément appris, j'ai adoré le faire. C'était vraiment un très grand plaisir !"); 
+            Console.ReadKey(true);
+            Environment.Exit(0);
         }
 
 
 
 
 
-       
+
     }
 }
